@@ -10,11 +10,14 @@ export const sliderComponent = function () {
   const PREVIOUS = "[data-ix-slider='previous']";
   const PAGINATION = '.slider_bullet_list';
   const PAGINATION_BUTTON = 'slider_bullet_item';
+  const SCROLLBAR = '.slider_scrollbar';
+  const SCROLLBAR_HANDLE = 'slider_scrollbar_handle';
   //options
   const FOLLOW_FINGER = 'data-ix-slider-follow-finger';
   const MOUSEWHEEL = 'data-ix-slider-mousewheel';
   const FREE_MODE = 'data-ix-slider-free-mode';
   const SLIDE_TO_CLICKED = 'data-ix-slider-slide-to-clicked';
+  const LOOP = 'data-ix-slider-loop';
   const SPEED = 'data-ix-slider-speed';
   const ACTIVE_CLASS = 'is-active';
 
@@ -48,17 +51,19 @@ export const sliderComponent = function () {
     const freeMode = attr(true, swiperElement.getAttribute(FREE_MODE));
     const mousewheel = attr(true, swiperElement.getAttribute(MOUSEWHEEL));
     const slideToClickedSlide = attr(false, swiperElement.getAttribute(SLIDE_TO_CLICKED));
+    const loopMode = attr(false, swiperElement.getAttribute(LOOP));
     const speed = attr(600, swiperElement.getAttribute(SPEED));
 
     //create slider instance
     new Swiper(swiperElement, {
       slidesPerView: 'auto',
       followFinger: followFinger,
-      loopAdditionalSlides: 10,
       freeMode: freeMode,
       slideToClickedSlide: slideToClickedSlide,
       centeredSlides: false,
       autoHeight: false,
+      loop: loopMode,
+      //   loopAdditionalSlides: 0,
       speed: speed,
       mousewheel: {
         enabled: mousewheel,
@@ -78,6 +83,12 @@ export const sliderComponent = function () {
         bulletClass: `${PAGINATION_BUTTON}`,
         bulletElement: 'button',
         clickable: true,
+      },
+      scrollbar: {
+        el: component.querySelector(SCROLLBAR),
+        draggable: true,
+        dragClass: SCROLLBAR_HANDLE,
+        snapOnRelease: true,
       },
       slideActiveClass: ACTIVE_CLASS,
       slideDuplicateActiveClass: ACTIVE_CLASS,
