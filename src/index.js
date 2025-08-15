@@ -3,6 +3,7 @@ import { accordion } from './interactions/accordion';
 import { clickActive } from './interactions/click-active';
 import { countUp } from './interactions/count-up';
 import { cursor } from './interactions/cursor';
+import { horizontal } from './interactions/horizontal';
 import { initLenis } from './interactions/lenis';
 import { load } from './interactions/load';
 import { marquee } from './interactions/marquee';
@@ -133,6 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
         marquee(gsapContext);
         sliderComponent();
         load(gsapContext);
+        horizontal(gsapContext);
         //conditional interactions
         if (!reduceMotion) {
           countUp(gsapContext);
