@@ -63,9 +63,8 @@ export const horizontal = function (gsapContext) {
     function containerRight() {
       return inner.offsetLeft + inner.offsetWidth + 'px';
     }
-    console.log(inner.offsetLeft);
-    //DEMO INNER TIMELINES
-    let tl2 = gsap.timeline({
+    //Sticky Header
+    let tlHeader = gsap.timeline({
       scrollTrigger: {
         trigger: list,
         containerAnimation: tl,
@@ -73,28 +72,42 @@ export const horizontal = function (gsapContext) {
         start: 'left ' + inner.getBoundingClientRect().left,
         end: 'right ' + inner.getBoundingClientRect().right,
         scrub: true,
-        markers: true,
+        // markers: true,
       },
       defaults: { ease: 'none' },
     });
-    console.log(containerRight());
-    tl2.to(header, {
+    tlHeader.to(header, {
       x: track.offsetWidth,
     });
-
-    //   //
-    //   let tl3 = gsap.timeline({
-    //     scrollTrigger: {
-    //       trigger: wrap.querySelector(".scroll_horizontal_pin_wrap"),
-    //       containerAnimation: tl,
-    //       start: "left " + containerLeft(),
-    //       end: "right " + containerRight(),
-    //       scrub: true,
-    //       // markers: true,
-    //     },
-    //     defaults: { ease: "none" },
-    //   });
-    //   tl3.to(wrap.querySelector(".scroll_horizontal_pin_element"), { xPercent: 100 });
-    //   tl3.from(wrap.querySelector(".scroll_horizontal_img"), { scale: 0.5 }, "<");
+    // // ATTEMPTED ITEM STACKING
+    // let stackOffset = 0;
+    // items.forEach((item, i) => {
+    //   //get the gap value
+    //   const gap = getComputedStyle(item).getPropertyValue('--_gap---gap-size');
+    //   const gapOffsetRem = Number.parseFloat(gap) * (i + 1);
+    //   const card = item.children;
+    //   const containerWidth = Number.parseFloat(track.offsetWidth);
+    //   stackOffset = stackOffset + item.offsetWidth + Number.parseFloat(gap) * 16;
+    //   console.log(item.offsetWidth);
+    //   //update the stack offset
+    //   if (i === 1) {
+    //     console.log(gapOffsetRem);
+    //     let tlItem = gsap.timeline({
+    //       scrollTrigger: {
+    //         trigger: item,
+    //         containerAnimation: tl,
+    //         // start when the left side of the element hits the left side of the container
+    //         start: 'left ' + inner.offsetLeft + 'px',
+    //         end: `+= ${containerWidth - stackOffset}`,
+    //         scrub: true,
+    //         markers: true,
+    //       },
+    //       defaults: { ease: 'none' },
+    //     });
+    //     tlItem.to(card, {
+    //       x: containerWidth - stackOffset,
+    //     });
+    //   }
+    // });
   });
 };

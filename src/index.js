@@ -135,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
         sliderComponent();
         load(gsapContext);
         horizontal(gsapContext);
+
         //conditional interactions
         if (!reduceMotion) {
           countUp(gsapContext);

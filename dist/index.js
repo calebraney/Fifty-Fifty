@@ -360,21 +360,19 @@
       function containerRight() {
         return inner.offsetLeft + inner.offsetWidth + "px";
       }
-      console.log(inner.offsetLeft);
-      let tl2 = gsap.timeline({
+      let tlHeader = gsap.timeline({
         scrollTrigger: {
           trigger: list,
           containerAnimation: tl,
           // start when the left side of the element hits the left side of the container
           start: "left " + inner.getBoundingClientRect().left,
           end: "right " + inner.getBoundingClientRect().right,
-          scrub: true,
-          markers: true
+          scrub: true
+          // markers: true,
         },
         defaults: { ease: "none" }
       });
-      console.log(containerRight());
-      tl2.to(header, {
+      tlHeader.to(header, {
         x: track.offsetWidth
       });
     });
