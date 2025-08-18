@@ -27,6 +27,92 @@ document.addEventListener('DOMContentLoaded', function () {
   //Global Variables
   let lenis;
 
+  const pathHover = function (gsapContext) {
+    //animation ID
+    const ANIMATION_ID = 'banner';
+    //selectors
+    const WRAP = '[data-ix-pathhover="wrap"]';
+    const PATH = '[data-ix-pathhover="path"]';
+    //options
+    const DURATION = 'data-ix-pathhover-duration';
+
+    //elements
+    const wraps = document.querySelectorAll(WRAP);
+    wraps.forEach((wrap) => {
+      //get elements
+      const paths = [...wrap.querySelectorAll(PATH)];
+
+      if (!wrap || paths.length === 0) return;
+
+      //check breakpoints and quit function if set on specific breakpoints
+      let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
+      if (runOnBreakpoint === false) return;
+      let duration = attr(1.2, wrap.getAttribute(DURATION));
+
+      // create main horizontal scroll timeline
+      let tl = gsap.timeline({
+        paused: true,
+      });
+      tl.fromTo(
+        paths,
+        {
+          drawSVG: '0%',
+        },
+        {
+          drawSVG: '0% 100%',
+          duration: duration,
+          ease: 'power2.inOut',
+        }
+      );
+
+      wrap.addEventListener('mouseenter', () => {
+        tl.play();
+      });
+      wrap.addEventListener('mouseleave', () => {
+        tl.reverse();
+      });
+    });
+  };
+
+  const banner = function (gsapContext) {
+    //animation ID
+    const ANIMATION_ID = 'banner';
+    //selectors
+    const WRAP = '[data-ix-banner="wrap"]';
+    const TRACK = '[data-ix-banner="track"]';
+    //options
+    const START = 'data-ix-banner-start';
+    const END = 'data-ix-banner-end';
+
+    //elements
+    const wraps = document.querySelectorAll(WRAP);
+    wraps.forEach((wrap) => {
+      //get elements
+      const track = wrap.querySelector(TRACK);
+
+      if (!wrap || !track) return;
+
+      //check breakpoints and quit function if set on specific breakpoints
+      let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
+      if (runOnBreakpoint === false) return;
+
+      let start = attr('center 80%', wrap.getAttribute(START));
+      let end = attr('center 20%', wrap.getAttribute(END));
+
+      // create main horizontal scroll timeline
+      let tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: wrap,
+          start: start,
+          end: end,
+          scrub: 1,
+          markers: false,
+        },
+      });
+      tl.to(track, { xPercent: -100, ease: 'none', duration: 1 });
+    });
+  };
+
   const caseScroll = function (gsapContext) {
     const ANIMATION_ID = 'casescroll';
 
@@ -182,6 +268,8 @@ document.addEventListener('DOMContentLoaded', function () {
         load(gsapContext);
         horizontal(gsapContext);
         caseScroll(gsapContext);
+        banner(gsapContext);
+        pathHover(gsapContext);
 
         //conditional interactions
         if (!reduceMotion) {
