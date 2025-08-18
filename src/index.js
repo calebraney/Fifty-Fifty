@@ -1,4 +1,4 @@
-import { attr, startScroll, stopScroll } from './utilities';
+import { attr, startScroll, stopScroll, checkBreakpoints } from './utilities';
 import { accordion } from './interactions/accordion';
 import { clickActive } from './interactions/click-active';
 import { countUp } from './interactions/count-up';
@@ -27,12 +27,12 @@ document.addEventListener('DOMContentLoaded', function () {
   //Global Variables
   let lenis;
 
-  const imageSwitch = function (gsapContext) {
-    const ANIMATION_ID = 'imageswitch';
+  const caseScroll = function (gsapContext) {
+    const ANIMATION_ID = 'casescroll';
 
-    const WRAP = '[data-ix-imageswitch="wrap"]';
-    const ITEM = '[data-ix-imageswitch="item"]';
-    const IMAGE = '[data-ix-imageswitch="image"]';
+    const WRAP = '[data-ix-casescroll="wrap"]';
+    const ITEM = '[data-ix-casescroll="item"]';
+    const IMAGE = '[data-ix-casescroll="image"]';
 
     const wraps = [...document.querySelectorAll(WRAP)];
     if (!wraps.length === 0) return;
@@ -135,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
         sliderComponent();
         load(gsapContext);
         horizontal(gsapContext);
+        caseScroll(gsapContext);
 
         //conditional interactions
         if (!reduceMotion) {
