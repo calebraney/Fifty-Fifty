@@ -1,4 +1,4 @@
-import { attr, startScroll, stopScroll, checkBreakpoints } from './utilities';
+import { attr, startScroll, stopScroll, checkBreakpoints, getClipDirection } from './utilities';
 import { accordion } from './interactions/accordion';
 import { clickActive } from './interactions/click-active';
 import { countUp } from './interactions/count-up';
@@ -47,6 +47,64 @@ document.addEventListener('DOMContentLoaded', function () {
       // for each tab link add an event listener that will scroll to the correct id
       if (items.length === 0 || images.length === 0) return;
 
+      // images.forEach((item) => item.classList.remove(ACTIVE_CLASS));
+      // //activate first item
+      // activateItem(0);
+      // animate each item
+      items.forEach((item, index) => {
+        const image = images[index];
+        if (!item || !image) return;
+        image.style.zIndex = `${-20 + index}`;
+        if (index !== 0) {
+          const tlIn = gsap.timeline({
+            scrollTrigger: {
+              trigger: item,
+              start: 'top 80%',
+              end: 'top center',
+              markers: false,
+              scrub: true,
+              onEnter: () => {
+                image.classList.add(ACTIVE_CLASS);
+              },
+              onLeaveBack: () => {
+                image.classList.remove(ACTIVE_CLASS);
+              },
+            },
+            defaults: { ease: 'power1.inOut', duration: 1 },
+          });
+          tlIn.fromTo(
+            image,
+            { clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)' },
+            { clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' }
+          );
+        } else {
+          image.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
+        }
+
+        if (index !== items.length - 1) {
+          const tlOut = gsap.timeline({
+            scrollTrigger: {
+              trigger: item,
+              start: 'bottom 80%',
+              end: 'bottom center',
+              markers: false,
+              scrub: true,
+              onLeave: () => {
+                image.classList.remove(ACTIVE_CLASS);
+              },
+              onEnterBack: () => {
+                image.classList.add(ACTIVE_CLASS);
+              },
+            },
+            defaults: { ease: 'power1.inOut', duration: 1 },
+          });
+          tlOut.to(image, {
+            clipPath: 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)',
+          });
+        }
+      });
+
+      /*
       //utility class to activate or de-activate item
       const activateItem = function (index, activate = true) {
         //get the matching items
@@ -98,19 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
           },
         });
       });
-
-      //manage clicking of tab links (button elements)
-      // tabLinks.forEach((link, index) => {
-      //   if (!link) return;
-      //   link.addEventListener('click', (e) => {
-      //     const el = items[index];
-      //     if (!el) return;
-      //     el.scrollIntoView({
-      //       behavior: 'smooth',
-      //       block: 'center',
-      //     });
-      //   });
-      // });
+      */
     });
   };
 

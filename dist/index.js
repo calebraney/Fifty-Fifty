@@ -48,8 +48,8 @@
     if (runDesktop === false && isDesktop) return false;
     return true;
   };
-  var getClipDirection = function(attributeValue) {
-    let clipMask = attributeValue;
+  var getClipDirection = function(clipKeyword) {
+    let clipMask = clipKeyword;
     const clipDirections = {
       left: "polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)",
       right: "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",
@@ -57,19 +57,19 @@
       bottom: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
       full: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"
     };
-    if (attributeValue === "left") {
+    if (clipKeyword === "left") {
       clipMask = clipDirections.left;
     }
-    if (attributeValue === "right") {
+    if (clipKeyword === "right") {
       clipMask = clipDirections.right;
     }
-    if (attributeValue === "top") {
+    if (clipKeyword === "top") {
       clipMask = clipDirections.top;
     }
-    if (attributeValue === "bottom") {
+    if (clipKeyword === "bottom") {
       clipMask = clipDirections.bottom;
     }
-    if (attributeValue === "full") {
+    if (clipKeyword === "full") {
       clipMask = clipDirections.full;
     }
     return clipMask;
@@ -1454,47 +1454,56 @@
         const images = [...wrap.querySelectorAll(IMAGE)];
         const ACTIVE_CLASS = "is-active";
         if (items.length === 0 || images.length === 0) return;
-        const activateItem = function(index, activate = true) {
-          const image = images[index];
-          const item2 = items[index];
-          if (activate) {
-            image.classList.add(ACTIVE_CLASS);
-            item2.classList.add(ACTIVE_CLASS);
-          } else {
-            image.classList.remove(ACTIVE_CLASS);
-            item2.classList.remove(ACTIVE_CLASS);
-          }
-        };
-        images.forEach((item2) => item2.classList.remove(ACTIVE_CLASS));
-        activateItem(0);
         items.forEach((item2, index) => {
           const image = images[index];
           if (!item2 || !image) return;
-          const imageTL = gsap.timeline({
-            scrollTrigger: {
-              trigger: item2,
-              start: "top center",
-              end: "bottom center",
-              markers: false,
-              scrub: true,
-              onEnter: () => {
-                activateItem(index);
-              },
-              onLeave: () => {
-                if (index !== items.length - 1) {
-                  activateItem(index, false);
+          image.style.zIndex = `${-20 + index}`;
+          if (index !== 0) {
+            const tlIn = gsap.timeline({
+              scrollTrigger: {
+                trigger: item2,
+                start: "top 80%",
+                end: "top center",
+                markers: false,
+                scrub: true,
+                onEnter: () => {
+                  image.classList.add(ACTIVE_CLASS);
+                },
+                onLeaveBack: () => {
+                  image.classList.remove(ACTIVE_CLASS);
                 }
               },
-              onEnterBack: () => {
-                activateItem(index);
-              },
-              onLeaveBack: () => {
-                if (index !== 0) {
-                  activateItem(index, false);
+              defaults: { ease: "power1.inOut", duration: 1 }
+            });
+            tlIn.fromTo(
+              image,
+              { clipPath: "polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)" },
+              { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" }
+            );
+          } else {
+            image.style.clipPath = "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)";
+          }
+          if (index !== items.length - 1) {
+            const tlOut = gsap.timeline({
+              scrollTrigger: {
+                trigger: item2,
+                start: "bottom 80%",
+                end: "bottom center",
+                markers: false,
+                scrub: true,
+                onLeave: () => {
+                  image.classList.remove(ACTIVE_CLASS);
+                },
+                onEnterBack: () => {
+                  image.classList.add(ACTIVE_CLASS);
                 }
-              }
-            }
-          });
+              },
+              defaults: { ease: "power1.inOut", duration: 1 }
+            });
+            tlOut.to(image, {
+              clipPath: "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)"
+            });
+          }
         });
       });
     };
