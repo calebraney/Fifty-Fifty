@@ -336,6 +336,7 @@
       let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
       if (runOnBreakpoint === false) return;
       function animation() {
+        let timelines2 = [];
         const setScrollDistance = function() {
           wrap.style.height = "calc(" + track.offsetWidth + "px + 100vh)";
         };
@@ -384,7 +385,7 @@
             start: "left " + inner.getBoundingClientRect().left,
             end: "right " + inner.getBoundingClientRect().right,
             scrub: true,
-            markers: true
+            markers: false
           },
           defaults: { ease: "none" }
         });
@@ -393,20 +394,29 @@
           let realIndex = i2 + 1;
           let difference = total - realIndex;
           const containerWidth = Number.parseFloat(track.offsetWidth);
-          console.log(containerWidth);
-          console.log(difference + 1, realIndex);
+          const itemWidth = containerWidth / (total - 1);
           tlItems.to(
             item2,
             {
-              xPercent: (i3) => 67 * difference,
+              x: (i3) => itemWidth * difference,
               duration: difference
             },
             i2
           );
         });
-        return tl;
+        timelines2.push(tl);
+        timelines2.push(tlHeader);
+        timelines2.push(tlItems);
+        return timelines2;
       }
-      animation();
+      let timelines = animation();
+      let windowWidth = window.innerWidth;
+      window.addEventListener("resize", function() {
+        if (window.innerWidth !== windowWidth) {
+          windowWidth = window.innerWidth;
+          window.location.reload();
+        }
+      });
     });
   };
 

@@ -32,6 +32,7 @@ export const horizontal = function (gsapContext) {
     if (runOnBreakpoint === false) return;
 
     function animation() {
+      let timelines = [];
       // function to set section height
       const setScrollDistance = function () {
         wrap.style.height = 'calc(' + track.offsetWidth + 'px + 100vh)';
@@ -80,6 +81,7 @@ export const horizontal = function (gsapContext) {
       tlHeader.to(header, {
         x: track.offsetWidth,
       });
+
       //Items stacking
       let tlItems = gsap.timeline({
         scrollTrigger: {
@@ -89,7 +91,7 @@ export const horizontal = function (gsapContext) {
           start: 'left ' + inner.getBoundingClientRect().left,
           end: 'right ' + inner.getBoundingClientRect().right,
           scrub: true,
-          markers: true,
+          markers: false,
         },
         defaults: { ease: 'none' },
       });
@@ -99,73 +101,46 @@ export const horizontal = function (gsapContext) {
         let realIndex = i + 1;
         let difference = total - realIndex;
         const containerWidth = Number.parseFloat(track.offsetWidth);
+        const itemWidth = containerWidth / (total - 1);
 
-        console.log(containerWidth);
-
-        console.log(difference + 1, realIndex);
         // console.log(100 * difference - 300);
-
         tlItems.to(
           item,
           {
-            xPercent: (i) => 67 * difference,
+            x: (i) => itemWidth * difference,
             duration: difference,
           },
           i
         );
+        //WORKING VERSION WITH PERCENTs
+        // tlItems.to(
+        //   item,
+        //   {
+        //     xPercent: (i) => 67 * difference,
+        //     duration: difference,
+        //   },
+        //   i
+        // );
       });
-      /*
-      let scrollTween = gsap.to(items, {
-        xPercent: (i) => -100 * i,
-        duration: (i) => 0.5 * i,
-        ease: 'none', // <-- IMPORTANT!
-        scrollTrigger: {
-          trigger: list,
-          containerAnimation: tl,
-          // start when the left side of the element hits the left side of the container
-          start: 'left ' + inner.getBoundingClientRect().left,
-          end: 'right ' + inner.getBoundingClientRect().right,
-          pin: true,
-          markers: true,
-          scrub: 0.1,
-          //snap: directionalSnap(1 / (sections.length - 1)),
-          //snap: directionalSnap(1 / (sections.length - 1)),
-          // end: '+=3000 bottom',
-        },
-      });
-      */
-      // // ATTEMPTED ITEM STACKING
-      // let stackOffset = 0;
-      // items.forEach((item, i) => {
-      //   //get the gap value
-      //   const gap = getComputedStyle(item).getPropertyValue('--_gap---gap-size');
-      //   const gapOffsetRem = Number.parseFloat(gap) * (i + 1);
-      //   const card = item.children;
-      //   const containerWidth = Number.parseFloat(track.offsetWidth);
-      //   stackOffset = stackOffset + item.offsetWidth + Number.parseFloat(gap) * 16;
-      //   console.log(item.offsetWidth);
-      //   //update the stack offset
-      //   if (i === 1) {
-      //     console.log(gapOffsetRem);
-      //     let tlItem = gsap.timeline({
-      //       scrollTrigger: {
-      //         trigger: item,
-      //         containerAnimation: tl,
-      //         // start when the left side of the element hits the left side of the container
-      //         start: 'left ' + inner.offsetLeft + 'px',
-      //         end: `+= ${containerWidth - stackOffset}`,
-      //         scrub: true,
-      //         markers: true,
-      //       },
-      //       defaults: { ease: 'none' },
-      //     });
-      //     tlItem.to(card, {
-      //       x: containerWidth - stackOffset,
-      //     });
-      //   }
-      // });
-      return tl;
+      timelines.push(tl);
+      timelines.push(tlHeader);
+      timelines.push(tlItems);
+      return timelines;
     }
-    animation();
+    let timelines = animation();
+
+    let windowWidth = window.innerWidth;
+    window.addEventListener('resize', function () {
+      if (window.innerWidth !== windowWidth) {
+        windowWidth = window.innerWidth;
+        window.location.reload();
+        //input code you want run after the browser width is changed
+        // timelines.forEach((tl) => {
+        //   console.log(tl);
+        //   tl.kill();
+        // });
+        // timelines = animation();
+      }
+    });
   });
 };
