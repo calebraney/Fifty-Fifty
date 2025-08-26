@@ -80,6 +80,60 @@ export const horizontal = function (gsapContext) {
       tlHeader.to(header, {
         x: track.offsetWidth,
       });
+      //Items stacking
+      let tlItems = gsap.timeline({
+        scrollTrigger: {
+          trigger: list,
+          containerAnimation: tl,
+          // start when the left side of the element hits the left side of the container
+          start: 'left ' + inner.getBoundingClientRect().left,
+          end: 'right ' + inner.getBoundingClientRect().right,
+          scrub: true,
+          markers: true,
+        },
+        defaults: { ease: 'none' },
+      });
+
+      items.forEach((item, i) => {
+        let total = items.length;
+        let realIndex = i + 1;
+        let difference = total - realIndex;
+        const containerWidth = Number.parseFloat(track.offsetWidth);
+
+        console.log(containerWidth);
+
+        console.log(difference + 1, realIndex);
+        // console.log(100 * difference - 300);
+
+        tlItems.to(
+          item,
+          {
+            xPercent: (i) => 67 * difference,
+            duration: difference,
+          },
+          i
+        );
+      });
+      /*
+      let scrollTween = gsap.to(items, {
+        xPercent: (i) => -100 * i,
+        duration: (i) => 0.5 * i,
+        ease: 'none', // <-- IMPORTANT!
+        scrollTrigger: {
+          trigger: list,
+          containerAnimation: tl,
+          // start when the left side of the element hits the left side of the container
+          start: 'left ' + inner.getBoundingClientRect().left,
+          end: 'right ' + inner.getBoundingClientRect().right,
+          pin: true,
+          markers: true,
+          scrub: 0.1,
+          //snap: directionalSnap(1 / (sections.length - 1)),
+          //snap: directionalSnap(1 / (sections.length - 1)),
+          // end: '+=3000 bottom',
+        },
+      });
+      */
       // // ATTEMPTED ITEM STACKING
       // let stackOffset = 0;
       // items.forEach((item, i) => {
