@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const END = 'data-ix-banner-end';
 
     //elements
-    const wraps = document.querySelectorAll(WRAP);
+    const wraps = [...document.querySelectorAll(WRAP)];
     wraps.forEach((wrap) => {
       //get elements
       const track = wrap.querySelector(TRACK);
@@ -124,19 +124,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const END = 'data-ix-videoscroll-end';
 
     //elements
-    const wraps = document.querySelectorAll(WRAP);
+    const wraps = [...document.querySelectorAll(WRAP)];
     wraps.forEach((wrap) => {
       //get elements
       const video = wrap.querySelector(VIDEO);
 
-      if (!wrap || !video);
+      if (!wrap || !video) return;
 
       //check breakpoints and quit function if set on specific breakpoints
-      let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
+      let runOnBreakpoint = checkBreakpoints(video, ANIMATION_ID, gsapContext);
       if (runOnBreakpoint === false) return;
 
-      let start = attr('center 80%', wrap.getAttribute(START));
-      let end = attr('center 20%', wrap.getAttribute(END));
+      let start = attr('top bottom', wrap.getAttribute(START));
+      let end = attr('bottom top', wrap.getAttribute(END));
 
       // once video loads create timeline
       video.addEventListener('loadedmetadata', () => {
