@@ -15,10 +15,9 @@ export const horizontal = function (gsapContext) {
   const OPTION_AUTO_HEIGHT = 'data-ix-horizontal-auto-height';
 
   //elements
-  const sections = document.querySelectorAll(WRAP);
-  sections.forEach((section) => {
+  const wraps = document.querySelectorAll(WRAP);
+  wraps.forEach((wrap) => {
     //get elements
-    const wrap = section;
     const inner = wrap.querySelector(INNER);
     const track = wrap.querySelector(TRACK);
     const list = wrap.querySelector(LIST);
@@ -52,6 +51,7 @@ export const horizontal = function (gsapContext) {
           start: 'top top',
           end: 'bottom bottom',
           scrub: true,
+          markers: false,
         },
         defaults: { ease: 'none' },
       });
@@ -91,11 +91,10 @@ export const horizontal = function (gsapContext) {
           start: 'left ' + inner.getBoundingClientRect().left,
           end: 'right ' + inner.getBoundingClientRect().right,
           scrub: true,
-          markers: false,
+          // markers: true,
         },
         defaults: { ease: 'none' },
       });
-
       items.forEach((item, i) => {
         let total = items.length;
         let realIndex = i + 1;
