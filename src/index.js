@@ -113,6 +113,47 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   };
 
+  const videoScroll = function (gsapContext) {
+    //animation ID
+    const ANIMATION_ID = 'videoscroll';
+    //selectors
+    const WRAP = '[data-ix-videoscroll="wrap"]';
+    const VIDEO = '[data-ix-videoscroll="video"]';
+    //options
+    const START = 'data-ix-videoscroll-start';
+    const END = 'data-ix-videoscroll-end';
+
+    //elements
+    const wraps = document.querySelectorAll(WRAP);
+    wraps.forEach((wrap) => {
+      //get elements
+      const video = wrap.querySelector(VIDEO);
+
+      if (!wrap || !video);
+
+      //check breakpoints and quit function if set on specific breakpoints
+      let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
+      if (runOnBreakpoint === false) return;
+
+      let start = attr('center 80%', wrap.getAttribute(START));
+      let end = attr('center 20%', wrap.getAttribute(END));
+
+      // once video loads create timeline
+      video.addEventListener('loadedmetadata', () => {
+        const duration = video.duration;
+        let tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: wrap,
+            start: start,
+            end: end,
+            scrub: 1,
+            markers: false,
+          },
+        });
+        tl.to(video, { currentTime: duration, ease: 'none' });
+      });
+    });
+  };
   const caseScroll = function (gsapContext) {
     const ANIMATION_ID = 'casescroll';
 
@@ -277,6 +318,7 @@ document.addEventListener('DOMContentLoaded', function () {
           parallax(gsapContext);
           scrollIn(gsapContext);
           scrolling(gsapContext);
+          videoScroll(gsapContext);
         }
       }
     );
