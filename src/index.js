@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
           const tlIn = gsap.timeline({
             scrollTrigger: {
               trigger: item,
-              start: 'top 80%',
+              start: 'top 70%',
               end: 'top center',
               markers: false,
               scrub: true,
@@ -199,20 +199,16 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             defaults: { ease: 'power1.inOut', duration: 1 },
           });
-          tlIn.fromTo(
-            image,
-            { clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)' },
-            { clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' }
-          );
+          tlIn.fromTo(image, { opacity: 0 }, { opacity: 1 });
         } else {
-          image.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
+          image.style.opacity = 1;
         }
 
         if (index !== items.length - 1) {
           const tlOut = gsap.timeline({
             scrollTrigger: {
               trigger: item,
-              start: 'bottom 80%',
+              start: 'bottom 70%',
               end: 'bottom center',
               markers: false,
               scrub: true,
@@ -226,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
             defaults: { ease: 'power1.inOut', duration: 1 },
           });
           tlOut.to(image, {
-            clipPath: 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)',
+            opacity: 0,
           });
         }
       });
