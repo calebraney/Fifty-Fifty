@@ -67,20 +67,20 @@ export const load = function (gsapContext) {
       }
       // split text and animate it
       SplitText.create(item, {
-        type: 'words',
-        // linesClass: 'line',
-        wordsClass: 'word',
+        type: 'lines',
+        linesClass: 'line',
+        // wordsClass: 'word',
         // charsClass: "char",
         // mask: 'lines',
         autoSplit: true,
         onSplit: (self) => {
           return tl.from(
-            self.words,
+            self.lines,
             {
               y: '50%',
               rotateX: 45,
               autoAlpha: 0,
-              stagger: 0.075,
+              stagger: 0.2,
             },
             position
           );
