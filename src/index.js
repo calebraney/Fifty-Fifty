@@ -13,6 +13,12 @@ import { scrolling } from './interactions/scrolling';
 import { sliderComponent } from './interactions/slider';
 import { videoPlyr } from './interactions/video-plyr';
 
+//////////////////////////////
+//Global Variables
+let lenis;
+let gsapInit;
+let gsapInitiated = 0;
+
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
   console.log('Local Script');
@@ -23,10 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
   if (gsap.Flip !== undefined) {
     gsap.registerPlugin(Flip);
   }
-
-  //////////////////////////////
-  //Global Variables
-  let lenis;
 
   const pathHover = function (gsapContext) {
     //animation ID
@@ -286,7 +288,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   //////////////////////////////
   //Control Functions on page load
-  const gsapInit = function () {
+  gsapInit = function () {
+    gsapInitiated++;
+    console.log(gsapInitiated);
     let mm = gsap.matchMedia();
     mm.add(
       {
@@ -361,4 +365,12 @@ document.addEventListener('DOMContentLoaded', function () {
     yearSpan.innerText = currentYear.toString();
   };
   updaterFooterYear();
+});
+
+// Fix invisible hero when returning via back/forward navigation (bfcache)
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) {
+    // Re-run GSAP init but prevent double initialization
+    gsapInit(true); // pass a flag to indicate restore mode
+  }
 });

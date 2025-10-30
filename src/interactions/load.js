@@ -51,6 +51,7 @@ export const load = function (gsapContext) {
       },
     });
     tl.set(wrap, {
+      clearProps: 'visibility', //chat gpt suggestion
       autoAlpha: 1,
     });
     //anything that needs to be set to start the interaction happens here
