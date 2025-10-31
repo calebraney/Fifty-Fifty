@@ -11,7 +11,6 @@ import { parallax } from './interactions/parallax';
 import { scrollIn } from './interactions/scroll-in';
 import { scrolling } from './interactions/scrolling';
 import { sliderComponent } from './interactions/slider';
-import { videoPlyr } from './interactions/video-plyr';
 
 //////////////////////////////
 //Global Variables
@@ -312,9 +311,6 @@ document.addEventListener('DOMContentLoaded', function () {
         caseScroll(gsapContext);
         banner(gsapContext);
         pathHover(gsapContext);
-
-        //setup video players
-        videoPlyr();
 
         //conditional interactions
         if (!reduceMotion) {
