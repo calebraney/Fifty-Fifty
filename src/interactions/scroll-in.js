@@ -168,35 +168,35 @@ export const scrollIn = function (gsapContext) {
     // );
   };
 
-  const scrollInLine = function (item) {
-    if (!item) return;
-    //set clip path directions
-    const clipAttr = attr('left', item.getAttribute(CLIP_DIRECTION));
-    const clipStart = getClipDirection(clipAttr);
-    const clipEnd = getClipDirection('full');
-    //create timeline
-    const tl = scrollInTL(item);
-    tl.fromTo(
-      item,
-      {
-        clipPath: clipStart,
-      },
-      {
-        clipPath: clipEnd,
-      }
-    );
-  };
+  // const scrollInLine = function (item) {
+  //   if (!item) return;
+  //   //set clip path directions
+  //   const clipAttr = attr('left', item.getAttribute(CLIP_DIRECTION));
+  //   const clipStart = getClipDirection(clipAttr);
+  //   const clipEnd = getClipDirection('full');
+  //   //create timeline
+  //   const tl = scrollInTL(item);
+  //   tl.fromTo(
+  //     item,
+  //     {
+  //       clipPath: clipStart,
+  //     },
+  //     {
+  //       clipPath: clipEnd,
+  //     }
+  //   );
+  // };
 
-  const scrollInContainer = function (item) {
-    if (!item) return;
-    //get the children of the item
-    const children = gsap.utils.toArray(item.children);
-    if (children.length === 0) return;
-    children.forEach((child) => {
-      const tl = scrollInTL(child);
-      const tween = defaultTween(child, tl);
-    });
-  };
+  // const scrollInContainer = function (item) {
+  //   if (!item) return;
+  //   //get the children of the item
+  //   const children = gsap.utils.toArray(item.children);
+  //   if (children.length === 0) return;
+  //   children.forEach((child) => {
+  //     const tl = scrollInTL(child);
+  //     const tween = defaultTween(child, tl);
+  //   });
+  // };
 
   const scrollInStagger = function (item) {
     if (!item) return;
@@ -210,24 +210,24 @@ export const scrollIn = function (gsapContext) {
     const tween = defaultTween(children, tl, { stagger: staggerAmount });
   };
 
-  const scrollInRichText = function (item) {
-    if (!item) return;
-    //get the children of the item
-    const children = gsap.utils.toArray(item.children);
-    if (children.length === 0) return;
-    children.forEach((child) => {
-      const childTag = child.tagName;
-      //apply the items animation based on the child type
-      if (['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(childTag)) {
-        scrollInHeading(child);
-      }
-      if (childTag === 'FIGURE') {
-        scrollInImage(child);
-      } else {
-        scrollInItem(child);
-      }
-    });
-  };
+  // const scrollInRichText = function (item) {
+  //   if (!item) return;
+  //   //get the children of the item
+  //   const children = gsap.utils.toArray(item.children);
+  //   if (children.length === 0) return;
+  //   children.forEach((child) => {
+  //     const childTag = child.tagName;
+  //     //apply the items animation based on the child type
+  //     if (['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(childTag)) {
+  //       scrollInHeading(child);
+  //     }
+  //     if (childTag === 'FIGURE') {
+  //       scrollInImage(child);
+  //     } else {
+  //       scrollInItem(child);
+  //     }
+  //   });
+  // };
 
   //get sections
   const wraps = [...document.querySelectorAll(`[${ATTRIBUTE}="${WRAP}"]`)];
@@ -248,7 +248,8 @@ export const scrollIn = function (gsapContext) {
       //find the type of the scrolling animation
       const scrollInType = item.getAttribute(ELEMENT);
       if (scrollInType === HEADING) {
-        scrollInHeading(item);
+        // scrollInHeading(item);
+        scrollInItem(item);
       }
       if (scrollInType === ITEM) {
         scrollInItem(item);
@@ -256,18 +257,18 @@ export const scrollIn = function (gsapContext) {
       if (scrollInType === IMAGE) {
         scrollInImage(item);
       }
-      if (scrollInType === LINE) {
-        scrollInLine(item);
-      }
-      if (scrollInType === CONTAINER) {
-        scrollInContainer(item);
-      }
+      // if (scrollInType === LINE) {
+      //   scrollInLine(item);
+      // }
+      // if (scrollInType === CONTAINER) {
+      //   scrollInContainer(item);
+      // }
       if (scrollInType === STAGGER) {
         scrollInStagger(item);
       }
-      if (scrollInType === RICH_TEXT) {
-        scrollInRichText(item);
-      }
+      // if (scrollInType === RICH_TEXT) {
+      //   scrollInRichText(item);
+      // }
     });
   });
 };

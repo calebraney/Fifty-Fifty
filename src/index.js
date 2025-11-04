@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //conditional interactions
         if (!reduceMotion) {
           countUp(gsapContext);
-          parallax(gsapContext);
+          // parallax(gsapContext);
           scrollIn(gsapContext);
           scrolling(gsapContext);
           videoScroll(gsapContext);
