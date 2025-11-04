@@ -238,6 +238,9 @@ export const scrollIn = function (gsapContext) {
     let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
     if (runOnBreakpoint === false && wrap.getAttribute('data-ix-load-run') === 'false') return;
 
+    //create variables from GSAP context
+    let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
+
     //get all items within the section
     const items = [...wrap.querySelectorAll(`[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="false"])`)];
     if (items.length === 0) return;
@@ -248,8 +251,11 @@ export const scrollIn = function (gsapContext) {
       //find the type of the scrolling animation
       const scrollInType = item.getAttribute(ELEMENT);
       if (scrollInType === HEADING) {
-        // scrollInHeading(item);
-        scrollInItem(item);
+        if (isMobile) {
+          loadItem(item);
+        } else {
+          loadHeading(item);
+        }
       }
       if (scrollInType === ITEM) {
         scrollInItem(item);

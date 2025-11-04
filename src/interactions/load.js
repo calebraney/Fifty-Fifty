@@ -161,8 +161,11 @@ export const load = function (gsapContext) {
       } else {
         //otherwise assign the correct animation to each element type
         if (loadType === HEADING) {
-          // loadHeading(item);
-          loadItem(item);
+          if (isMobile) {
+            loadItem(item);
+          } else {
+            loadHeading(item);
+          }
         }
         if (loadType === IMAGE) {
           loadImage(item);
