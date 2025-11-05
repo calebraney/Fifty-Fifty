@@ -38,22 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //options
     const DURATION = 'data-ix-pathhover-duration';
 
-    //old version trying to only get new wraps
-    // let wraps = [];
-    // if (customList) {
-    //   console.log(customList);
-    //   customList.forEach((item) => {
-    //     const innerwraps = [...item.querySelectorAll(WRAP)];
-    //     if (!innerwraps.length === 0) {
-    //       wraps.push(...innerwraps);
-    //     }
-    //   });
-    // } else {
-    //   wraps = [...document.querySelectorAll(WRAP)];
-    // }
-
     const wraps = [...document.querySelectorAll(WRAP)];
-
     wraps.forEach((wrap, i) => {
       //get elements
       const paths = [...wrap.querySelectorAll(PATH)];
@@ -304,10 +289,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   };
 
-  /**
-   * Initialize GSAP interaction on all Finsweet list instances,
-   * and call gsapInteraction() each time new items are added/rendered.
-   */
   function finsweetLoadCallback(gsapContext) {
     // Ensure the fsAttributes array is set up
     window.FinsweetAttributes ||= [];
@@ -316,18 +297,12 @@ document.addEventListener('DOMContentLoaded', function () {
       (listInstances) => {
         // listInstances is an array of all CMSList (or List) instances on the page
         listInstances.forEach((listInstance) => {
-          //watch for when new items are added
-          // listInstance.watch(
-          //   () => listInstance.items,
-          //   (newItems, oldItems) => {
-          //     console.log('Items updated:', newItems, oldItems);
-          //   }
-          // );
-          // Ensure that only items for the current target are displayed
+          //for each list instance wait for the afterRender callback then recieve an object with all of the items rendered
+          // can also fire on: start, filter, sort, pagination, beforeRender, render, or afterRender
           listInstance.addHook('afterRender', (items) => {
-            // console.log('items loaded', items, items.length, typeof items);
+            //if items exist re-initiate the interaction
             if (items.length !== 0) {
-              pathHover(gsapContext, true);
+              pathHover(gsapContext);
             }
           });
         });
