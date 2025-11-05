@@ -252,9 +252,9 @@ export const scrollIn = function (gsapContext) {
       const scrollInType = item.getAttribute(ELEMENT);
       if (scrollInType === HEADING) {
         if (isMobile) {
-          loadItem(item);
+          scrollInItem(item);
         } else {
-          loadHeading(item);
+          scrollInHeading(item);
         }
       }
       if (scrollInType === ITEM) {
