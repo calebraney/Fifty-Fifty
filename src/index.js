@@ -65,9 +65,9 @@ document.addEventListener('DOMContentLoaded', function () {
       if (runOnBreakpoint === false) return;
       let duration = attr(1.2, wrap.getAttribute(DURATION));
       //if restart is true kill the timelines
-      if (restart && tl) {
-        tl.killTweensOf(paths);
-      }
+      // if (restart && tl) {
+      //   tl.killTweensOf(paths);
+      // }
 
       // create main horizontal scroll timeline
       let tl = gsap.timeline({
