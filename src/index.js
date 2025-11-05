@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     gsap.registerPlugin(Flip);
   }
 
-  const pathHover = function (gsapContext, customList) {
+  const pathHover = function (gsapContext, restart) {
     //animation ID
     const ANIMATION_ID = 'banner';
     //selectors
@@ -38,20 +38,23 @@ document.addEventListener('DOMContentLoaded', function () {
     //options
     const DURATION = 'data-ix-pathhover-duration';
 
-    let wraps = [];
-    if (customList) {
-      console.log(customList);
-      customList.forEach((item) => {
-        const innerwraps = [...item.querySelectorAll(WRAP)];
-        if (!innerwraps.length === 0) {
-          wraps.push(...innerwraps);
-        }
-      });
-    } else {
-      wraps = [...document.querySelectorAll(WRAP)];
-    }
+    //old version trying to only get new wraps
+    // let wraps = [];
+    // if (customList) {
+    //   console.log(customList);
+    //   customList.forEach((item) => {
+    //     const innerwraps = [...item.querySelectorAll(WRAP)];
+    //     if (!innerwraps.length === 0) {
+    //       wraps.push(...innerwraps);
+    //     }
+    //   });
+    // } else {
+    //   wraps = [...document.querySelectorAll(WRAP)];
+    // }
 
-    wraps.forEach((wrap) => {
+    const wraps = [...document.querySelectorAll(WRAP)];
+
+    wraps.forEach((wrap, i) => {
       //get elements
       const paths = [...wrap.querySelectorAll(PATH)];
 
@@ -61,6 +64,10 @@ document.addEventListener('DOMContentLoaded', function () {
       let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
       if (runOnBreakpoint === false) return;
       let duration = attr(1.2, wrap.getAttribute(DURATION));
+      //if restart is true kill the timelines
+      if (restart) {
+        tl.killTweensOf(paths);
+      }
 
       // create main horizontal scroll timeline
       let tl = gsap.timeline({
@@ -318,9 +325,9 @@ document.addEventListener('DOMContentLoaded', function () {
           );
           // Ensure that only items for the current target are displayed
           listInstance.addHook('afterRender', (items) => {
-            console.log('items loaded', items);
+            console.log('items loaded', items, items.length, typeof items);
             if (items.length !== 0) {
-              caseScroll(gsapContext, items);
+              pathHover(gsapContext, true);
             }
           });
         });
