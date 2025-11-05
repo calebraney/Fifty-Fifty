@@ -20,7 +20,7 @@ let gsapInitiated = 0;
 
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
-  console.log('Local Script');
+  // console.log('Local Script');
   // register gsap plugins if available
   if (gsap.ScrollTrigger !== undefined) {
     gsap.registerPlugin(ScrollTrigger);
@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
       let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
       if (runOnBreakpoint === false) return;
       let duration = attr(1.2, wrap.getAttribute(DURATION));
+      console.log(pathHover);
 
       // create main horizontal scroll timeline
       let tl = gsap.timeline({
@@ -69,9 +70,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
       wrap.addEventListener('mouseenter', () => {
         tl.play();
+        console.log(path, 'play');
       });
       wrap.addEventListener('mouseleave', () => {
         tl.reverse();
+        console.log(path, 'reverse');
       });
     });
   };
@@ -289,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function () {
   //Control Functions on page load
   gsapInit = function () {
     gsapInitiated++;
-    console.log(gsapInitiated);
+    // console.log(gsapInitiated);
     let mm = gsap.matchMedia();
     mm.add(
       {
