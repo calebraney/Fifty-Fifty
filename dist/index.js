@@ -2374,8 +2374,8 @@
           horizontal(gsapContext);
           caseScroll(gsapContext);
           banner(gsapContext);
-          pathHover(gsapContext);
           if (!reduceMotion) {
+            pathHover(gsapContext);
             countUp(gsapContext);
             scrollIn(gsapContext);
             scrolling(gsapContext);

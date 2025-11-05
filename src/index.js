@@ -313,10 +313,10 @@ document.addEventListener('DOMContentLoaded', function () {
         horizontal(gsapContext);
         caseScroll(gsapContext);
         banner(gsapContext);
-        pathHover(gsapContext);
 
         //conditional interactions
         if (!reduceMotion) {
+          pathHover(gsapContext);
           countUp(gsapContext);
           // parallax(gsapContext);
           scrollIn(gsapContext);
