@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     gsap.registerPlugin(Flip);
   }
 
-  const pathHover = function (gsapContext, rootElement) {
+  const pathHover = function (gsapContext, customList) {
     //animation ID
     const ANIMATION_ID = 'banner';
     //selectors
@@ -38,8 +38,19 @@ document.addEventListener('DOMContentLoaded', function () {
     //options
     const DURATION = 'data-ix-pathhover-duration';
 
-    //elements
-    const wraps = document.querySelectorAll(WRAP);
+    let wraps = [];
+    if (customList) {
+      console.log(customList);
+      customList.forEach((item) => {
+        const innerwraps = [...item.querySelectorAll(WRAP)];
+        if (!innerwraps.length === 0) {
+          wraps.push(...innerwraps);
+        }
+      });
+    } else {
+      wraps = [...document.querySelectorAll(WRAP)];
+    }
+
     wraps.forEach((wrap) => {
       //get elements
       const paths = [...wrap.querySelectorAll(PATH)];
@@ -156,23 +167,15 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   };
-  const caseScroll = function (gsapContext, customList) {
+  const caseScroll = function (gsapContext) {
     const ANIMATION_ID = 'casescroll';
 
     const WRAP = '[data-ix-casescroll="wrap"]';
     const ITEM = '[data-ix-casescroll="item"]';
     const IMAGE = '[data-ix-casescroll="image"]';
-    let wraps = [];
-    if (customList) {
-      customList.forEach((item) => {
-        const innerwraps = [...item.querySelectorAll(WRAP)];
-        if (!innerwraps.length === 0) {
-          wraps.push(...innerwraps);
-        }
-      });
-    } else {
-      wraps = [...document.querySelectorAll(WRAP)];
-    }
+
+    const wraps = [...document.querySelectorAll(WRAP)];
+
     if (!wraps.length === 0) return;
     wraps.forEach((wrap) => {
       //check breakpoints and quit function if set on specific breakpoints
@@ -306,17 +309,20 @@ document.addEventListener('DOMContentLoaded', function () {
       (listInstances) => {
         // listInstances is an array of all CMSList (or List) instances on the page
         listInstances.forEach((listInstance) => {
-          // Ensure that only items for the current target are displayed
-          listInstance.addHook('afterRender', (items) => {
-            console.log('items loaded', items);
-            caseScroll(gsapContext, items);
-          });
+          //watch for when new items are added
           listInstance.watch(
             () => listInstance.items,
             (newItems, oldItems) => {
               console.log('Items updated:', newItems, oldItems);
             }
           );
+          // Ensure that only items for the current target are displayed
+          listInstance.addHook('afterRender', (items) => {
+            console.log('items loaded', items);
+            if (items.length !== 0) {
+              caseScroll(gsapContext, items);
+            }
+          });
         });
       },
     ]);
