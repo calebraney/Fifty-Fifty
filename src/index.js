@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function () {
           // );
           // Ensure that only items for the current target are displayed
           listInstance.addHook('afterRender', (items) => {
-            console.log('items loaded', items, items.length, typeof items);
+            // console.log('items loaded', items, items.length, typeof items);
             if (items.length !== 0) {
               pathHover(gsapContext, true);
             }
