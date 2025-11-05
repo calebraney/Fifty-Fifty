@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     gsap.registerPlugin(Flip);
   }
 
-  const pathHover = function (gsapContext) {
+  const pathHover = function (gsapContext, rootElement) {
     //animation ID
     const ANIMATION_ID = 'banner';
     //selectors
@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
       let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
       if (runOnBreakpoint === false) return;
       let duration = attr(1.2, wrap.getAttribute(DURATION));
-      console.log(pathHover);
 
       // create main horizontal scroll timeline
       let tl = gsap.timeline({
@@ -70,11 +69,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
       wrap.addEventListener('mouseenter', () => {
         tl.play();
-        console.log(path, 'play');
       });
       wrap.addEventListener('mouseleave', () => {
         tl.reverse();
-        console.log(path, 'reverse');
       });
     });
   };
@@ -159,14 +156,23 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   };
-  const caseScroll = function (gsapContext) {
+  const caseScroll = function (gsapContext, customList) {
     const ANIMATION_ID = 'casescroll';
 
     const WRAP = '[data-ix-casescroll="wrap"]';
     const ITEM = '[data-ix-casescroll="item"]';
     const IMAGE = '[data-ix-casescroll="image"]';
-
-    const wraps = [...document.querySelectorAll(WRAP)];
+    let wraps = [];
+    if (customList) {
+      customList.forEach((item) => {
+        const innerwraps = [...item.querySelectorAll(WRAP)];
+        if (!innerwraps.length === 0) {
+          wraps.push(...innerwraps);
+        }
+      });
+    } else {
+      wraps = [...document.querySelectorAll(WRAP)];
+    }
     if (!wraps.length === 0) return;
     wraps.forEach((wrap) => {
       //check breakpoints and quit function if set on specific breakpoints
@@ -288,6 +294,42 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   };
 
+  /**
+   * Initialize GSAP interaction on all Finsweet list instances,
+   * and call gsapInteraction() each time new items are added/rendered.
+   */
+  function finsweetLoadCallback(gsapContext) {
+    // Ensure the fsAttributes array is set up
+    window.fsAttributes = window.fsAttributes || [];
+
+    // Push the 'cmsload' (List Load) callback
+    window.fsAttributes.push([
+      'cmsload',
+      (listInstances) => {
+        // listInstances is an array of all CMSList (or List) instances on the page
+        listInstances.forEach((listInstance) => {
+          // First: run interaction on all currently rendered items
+          // Depending on how you structure gsapInteraction you may want to pass the elements
+          // Example: gsapInteraction(targetElements)
+
+          // Then set up event listeners for new items
+          // 'renderitems' fires when items are rendered into the list.
+          listInstance.on('renderitems', (renderedItems) => {
+            // renderedItems is an array of item elements or item objects
+            // You can pass these items to your GSAP interaction if you like
+            console.log('items loaded', renderedItems);
+            caseScroll(gsapContext, renderedItems);
+          });
+
+          // Optionally, you may also listen for 'additems' if you want items added (and not just rendered) :contentReference[oaicite:2]{index=2}
+          // listInstance.on('additems', (addedItems) => {
+          //   gsapInteraction(addedItems);
+          // });
+        });
+      },
+    ]);
+  }
+
   //////////////////////////////
   //Control Functions on page load
   gsapInit = function () {
@@ -323,6 +365,7 @@ document.addEventListener('DOMContentLoaded', function () {
           scrolling(gsapContext);
           videoScroll(gsapContext);
         }
+        finsweetLoadCallback(gsapContext);
       }
     );
   };
