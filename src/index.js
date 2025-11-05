@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (runOnBreakpoint === false) return;
       let duration = attr(1.2, wrap.getAttribute(DURATION));
       //if restart is true kill the timelines
-      if (restart) {
+      if (restart && tl) {
         tl.killTweensOf(paths);
       }
 
@@ -317,12 +317,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // listInstances is an array of all CMSList (or List) instances on the page
         listInstances.forEach((listInstance) => {
           //watch for when new items are added
-          listInstance.watch(
-            () => listInstance.items,
-            (newItems, oldItems) => {
-              console.log('Items updated:', newItems, oldItems);
-            }
-          );
+          // listInstance.watch(
+          //   () => listInstance.items,
+          //   (newItems, oldItems) => {
+          //     console.log('Items updated:', newItems, oldItems);
+          //   }
+          // );
           // Ensure that only items for the current target are displayed
           listInstance.addHook('afterRender', (items) => {
             console.log('items loaded', items, items.length, typeof items);
