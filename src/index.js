@@ -300,31 +300,23 @@ document.addEventListener('DOMContentLoaded', function () {
    */
   function finsweetLoadCallback(gsapContext) {
     // Ensure the fsAttributes array is set up
-    window.fsAttributes = window.fsAttributes || [];
-
-    // Push the 'cmsload' (List Load) callback
-    window.fsAttributes.push([
-      'cmsload',
+    window.FinsweetAttributes ||= [];
+    window.FinsweetAttributes.push([
+      'list',
       (listInstances) => {
         // listInstances is an array of all CMSList (or List) instances on the page
         listInstances.forEach((listInstance) => {
-          // First: run interaction on all currently rendered items
-          // Depending on how you structure gsapInteraction you may want to pass the elements
-          // Example: gsapInteraction(targetElements)
-
-          // Then set up event listeners for new items
-          // 'renderitems' fires when items are rendered into the list.
-          listInstance.on('renderitems', (renderedItems) => {
-            // renderedItems is an array of item elements or item objects
-            // You can pass these items to your GSAP interaction if you like
-            console.log('items loaded', renderedItems);
-            caseScroll(gsapContext, renderedItems);
+          // Ensure that only items for the current target are displayed
+          listInstance.addHook('afterRender', (items) => {
+            console.log('items loaded', items);
+            caseScroll(gsapContext, items);
           });
-
-          // Optionally, you may also listen for 'additems' if you want items added (and not just rendered) :contentReference[oaicite:2]{index=2}
-          // listInstance.on('additems', (addedItems) => {
-          //   gsapInteraction(addedItems);
-          // });
+          listInstance.watch(
+            () => listInstance.items,
+            (newItems, oldItems) => {
+              console.log('Items updated:', newItems, oldItems);
+            }
+          );
         });
       },
     ]);
